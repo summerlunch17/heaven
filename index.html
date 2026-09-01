@@ -22,6 +22,30 @@
             background-color: #000;
         }
 
+        /* 朴素的纯黑全屏引导遮罩层 */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* 中间灰色半透明小字 */
+        .simple-click-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
         /* 视频背景样式：宽度优先铺满，绝无左右黑边 */
         .video-background {
             position: fixed;
@@ -188,6 +212,11 @@
 </head>
 <body>
 
+    <!-- 朴素的全屏引导遮罩层 -->
+    <div id="welcome-overlay">
+        <span class="simple-click-text">click.</span>
+    </div>
+
     <!-- 视频背景 -->
     <video autoplay loop muted playsinline class="video-background">
         <source src="bg.mp4" type="video/mp4">
@@ -231,28 +260,27 @@
     <script>
         const audio = document.getElementById('bgm');
         const btn = document.getElementById('music-toggle');
+        const overlay = document.getElementById('welcome-overlay');
 
-        audio.play().then(() => {
-            btn.style.color = '#ffffff';
-        }).catch(() => {
-            btn.style.color = '#000000';
+        // 点击引导层时：请求全屏 + 播放音乐 + 直接移除遮罩
+        overlay.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log("全屏请求被拒绝:", err);
+                });
+            }
+
+            audio.play().then(() => {
+                btn.style.color = '#ffffff';
+            }).catch(() => {
+                btn.style.color = '#000000';
+            });
+
+            // 直接移除遮罩，没有多余的淡出动画
+            overlay.remove();
         });
 
-        const enterFullscreen = () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
-            if (audio.paused) {
-                audio.play();
-                btn.style.color = '#ffffff';
-            }
-            document.removeEventListener('click', enterFullscreen);
-            document.removeEventListener('keydown', enterFullscreen);
-        };
-
-        document.addEventListener('click', enterFullscreen);
-        document.addEventListener('keydown', enterFullscreen);
-
+        // 音乐开关按钮逻辑
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (audio.paused) {
@@ -264,6 +292,7 @@
             }
         });
 
+        // 阶梯菜单点击效果
         const stairItems = document.querySelectorAll('.stair-item');
         stairItems.forEach(item => {
             item.addEventListener('mouseup', () => {
