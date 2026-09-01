@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heaven Web</title>
+    <style>
+        * {
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('gif/From Klickpin.com- Try Smart easy dinner recipes that are worth saving if you love timeless details with a modern twist for your next inspiration.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        #music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 999;
+            outline: none;
+            transition: color 0.3s ease;
+        }
+
+        /* 底部的天堂之门图片 */
+        .center-image {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 115vh;
+            width: auto;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* 十字架动图 */
+        .cross-gif {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: auto;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* 天使雕像通用样式：全部统一大小 (48vh) */
+        .angel {
+            position: fixed;
+            width: auto;
+            height: 48vh;
+            pointer-events: none;
+        }
+
+        /* 天使左右分散位置 */
+        .angel-l-inner  { left: 18%; bottom: 0; z-index: 11; }
+        .angel-l-middle { left: 10%; bottom: 4vh; z-index: 13; }
+        .angel-l-top    { left: 0%;  top: 40vh; z-index: 12; }
+
+        .angel-r-inner  { right: 18%; bottom: 0; z-index: 11; }
+        .angel-r-middle { right: 10%; bottom: 4vh; z-index: 13; }
+        .angel-r-top    { right: 1%;  top: 50vh; z-index: 14; }
+
+        /* HEAVEN 标题：加深天蓝色（#0099cc） */
+        .heaven-title {
+            position: fixed;
+            top: 13.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            z-index: 25;
+            pointer-events: none;
+            
+            /* 极度强化像素化与硬锯齿效果 */
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            background: #0099cc;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            filter: drop-shadow(2px 2px 0px white) drop-shadow(-2px -2px 0px white) drop-shadow(2px -2px 0px white) drop-shadow(-2px 2px 0px white) contrast(200%) blur(0.8px);
+        }
+
+        /* 闪烁动画定义 */
+        @keyframes blink {
+            0% { opacity: 0.2; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #ffffff); }
+            100% { opacity: 0.2; transform: scale(0.9); }
+        }
+
+        /* 放在 HEAVEN 左右两侧的白色闪烁十字架 */
+        .blinking-cross {
+            position: fixed;
+            top: 13.8%;
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+            z-index: 25;
+            pointer-events: none;
+            animation: blink 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 2px white) contrast(200%) pixelated;
+        }
+
+        .cross-left {
+            left: calc(50% - 150px);
+        }
+
+        .cross-right {
+            right: calc(50% - 150px);
+        }
+
+        /* 阶梯上的文字列表容器：左侧对齐 */
+        .stairs-menu {
+            position: fixed;
+            bottom: 12vh;
+            left: 50%;
+            transform: translateX(-38%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 25;
+            align-items: flex-start;
+            pointer-events: auto;
+        }
+
+        /* 选项行：加深天蓝色 (#0099cc)，左侧对齐 */
+        .stair-item {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 2px double #0099cc;
+            padding-bottom: 2px;
+            text-align: left;
+            transition: transform 0.2s ease, color 0.2s ease;
+
+            /* 极致像素化处理 */
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            background: #0099cc;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            filter: contrast(200%) blur(0.6px);
+            text-shadow: 1.5px 1.5px 0 white;
+        }
+
+        /* 鼠标按下（点击瞬间）或悬停时变成红色字体与红色中划线，鼠标移开自动恢复 */
+        .stair-item:active {
+            background: #ff0000 !important;
+            text-decoration: line-through !important;
+            text-decoration-color: #ff0000 !important;
+            border-bottom: 2px double #ff0000 !important;
+            text-shadow: 1.5px 1.5px 0 white !important;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" src="sound/电子世界幻想 P1 天堂的呼吸_27775076733.mp3" loop></audio>
+
+    <button id="music-toggle" style="color: #ffffff;">♪</button>
+
+    <!-- HEAVEN 及两侧闪烁十字架 -->
+    <div class="blinking-cross cross-left">✝</div>
+    <div class="heaven-title">HEAVEN</div>
+    <div class="blinking-cross cross-right">✝</div>
+
+    <!-- 楼梯上的文字选项菜单 -->
+    <div class="stairs-menu">
+        <a href="javascript:void(0);" class="stair-item">CLICK to apologize!</a>
+        <a href="javascript:void(0);" class="stair-item">CLICK to be saved!</a>
+        <a href="javascript:void(0);" class="stair-item">CLICK to forgive!</a>
+        <a href="javascript:void(0);" class="stair-item">CLICK to forget!</a>
+        <a href="javascript:void(0);" class="stair-item">CLICK to be pure!</a>
+    </div>
+
+    <!-- 左侧三个天使 -->
+    <img src="img/angel2.png" alt="Angel 2" class="angel angel-l-inner">
+    <img src="img/angel5.png" alt="Angel 5" class="angel angel-l-middle">
+    <img src="img/angel4.png" alt="Angel 4" class="angel angel-l-top">
+
+    <!-- 右侧三个天使 -->
+    <img src="img/angel1.png" alt="Angel 1" class="angel angel-r-inner">
+    <img src="img/angel3.png" alt="Angel 3" class="angel angel-r-middle">
+    <img src="img/angel6.png" alt="Angel 6" class="angel angel-r-top">
+
+    <!-- 天堂之门底图 -->
+    <img src="img/e37ccc00bd9fc33f778b29f7d0168b24.png" alt="Heaven Gate" class="center-image">
+
+    <!-- 十字架动图 -->
+    <img src="gif/ezgif-4dbd0aee54aff386.gif" alt="Cross" class="cross-gif">
+
+    <script>
+        const audio = document.getElementById('bgm');
+        const btn = document.getElementById('music-toggle');
+
+        audio.play().then(() => {
+            btn.style.color = '#ffffff';
+        }).catch(() => {
+            btn.style.color = '#000000';
+        });
+
+        const enterFullscreen = () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+            if (audio.paused) {
+                audio.play();
+                btn.style.color = '#ffffff';
+            }
+            document.removeEventListener('click', enterFullscreen);
+            document.removeEventListener('keydown', enterFullscreen);
+        };
+
+        document.addEventListener('click', enterFullscreen);
+        document.addEventListener('keydown', enterFullscreen);
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+                btn.style.color = '#ffffff';
+            } else {
+                audio.pause();
+                btn.style.color = '#000000';
+            }
+        });
+    </script>
+
+</body>
+</html>
