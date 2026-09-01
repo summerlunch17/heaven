@@ -14,12 +14,19 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('gif/bg.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             overflow: hidden;
+            background-color: #000; /* 视频加载前或四周多余空间的黑色兜底 */
+        }
+
+        .video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            z-index: -1000;
+            object-fit: cover; /* 保证宽度铺满、绝无左右黑边，上下多余部分自动裁剪 */
         }
 
         #music-toggle {
@@ -163,7 +170,7 @@
             text-shadow: 1.5px 1.5px 0 white;
         }
 
-        /* 当带有 .clicked 类时（松开后延迟恢复的状态）呈现红色和中划线 */
+        /* 当带有 .clicked 类时呈现红色和中划线 */
         .stair-item.clicked {
             background: #ff0000 !important;
             text-decoration: line-through !important;
@@ -175,6 +182,12 @@
     </style>
 </head>
 <body>
+
+    <!-- 视频背景 -->
+    <video autoplay loop muted playsinline class="video-background">
+        <source src="bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <audio id="bgm" src="sound/电子世界幻想 P1 天堂的呼吸_27775076733.mp3" loop></audio>
 
@@ -246,16 +259,14 @@
             }
         });
 
-        // 实现菜单选项点击松开后延迟 0.5s 再恢复的效果
         const stairItems = document.querySelectorAll('.stair-item');
         stairItems.forEach(item => {
             item.addEventListener('mouseup', () => {
                 item.classList.add('clicked');
                 setTimeout(() => {
                     item.classList.remove('clicked');
-                }, 500); // 500毫秒 = 0.5秒
+                }, 500);
             });
-            // 适配触屏设备
             item.addEventListener('touchend', () => {
                 item.classList.add('clicked');
                 setTimeout(() => {
