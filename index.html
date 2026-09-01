@@ -89,7 +89,6 @@
             z-index: 25;
             pointer-events: none;
             
-            /* 极度强化像素化与硬锯齿效果 */
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             background: #0099cc;
@@ -154,7 +153,6 @@
             text-align: left;
             transition: transform 0.2s ease, color 0.2s ease;
 
-            /* 极致像素化处理 */
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             background: #0099cc;
@@ -165,8 +163,8 @@
             text-shadow: 1.5px 1.5px 0 white;
         }
 
-        /* 鼠标按下（点击瞬间）或悬停时变成红色字体与红色中划线，鼠标移开自动恢复 */
-        .stair-item:active {
+        /* 当带有 .clicked 类时（松开后延迟恢复的状态）呈现红色和中划线 */
+        .stair-item.clicked {
             background: #ff0000 !important;
             text-decoration: line-through !important;
             text-decoration-color: #ff0000 !important;
@@ -246,6 +244,24 @@
                 audio.pause();
                 btn.style.color = '#000000';
             }
+        });
+
+        // 实现菜单选项点击松开后延迟 0.5s 再恢复的效果
+        const stairItems = document.querySelectorAll('.stair-item');
+        stairItems.forEach(item => {
+            item.addEventListener('mouseup', () => {
+                item.classList.add('clicked');
+                setTimeout(() => {
+                    item.classList.remove('clicked');
+                }, 500); // 500毫秒 = 0.5秒
+            });
+            // 适配触屏设备
+            item.addEventListener('touchend', () => {
+                item.classList.add('clicked');
+                setTimeout(() => {
+                    item.classList.remove('clicked');
+                }, 500);
+            });
         });
     </script>
 
