@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heaven Web</title>
+    
+    <!-- 网站浏览器标签页图标 -->
+    <link rel="icon" type="image/png" href="img/2f6fb55e98f0560d26fe0396960cc7d1.png">
+
     <style>
         * {
             -webkit-font-smoothing: none;
@@ -15,9 +19,10 @@
             padding: 0;
             height: 100vh;
             overflow: hidden;
-            background-color: #000; /* 视频加载前或四周多余空间的黑色兜底 */
+            background-color: #000;
         }
 
+        /* 视频背景样式：宽度优先铺满，绝无左右黑边 */
         .video-background {
             position: fixed;
             top: 50%;
@@ -26,7 +31,7 @@
             width: 100vw;
             height: 100vh;
             z-index: -1000;
-            object-fit: cover; /* 保证宽度铺满、绝无左右黑边，上下多余部分自动裁剪 */
+            object-fit: cover;
         }
 
         #music-toggle {
